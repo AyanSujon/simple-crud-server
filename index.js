@@ -1,0 +1,51 @@
+const express = require('express');
+const cors = require('cors');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+
+// simpleDBUser
+// Je92iM98b7AiXa8p
+// const uri = "mongodb+srv://simpleDBUser:<db_password>@cluster0.tachgq7.mongodb.net/?appName=Cluster0";
+const uri = "mongodb+srv://simpleDBUser:Je92iM98b7AiXa8p@cluster0.tachgq7.mongodb.net/?appName=Cluster0";
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+
+
+app.get('/', (req, res)=> {
+    res.send('Simple CRUD Server is Runnig ');
+
+})
+
+async function run() {
+    try{
+        await client.connect();
+        await client.db("admin").command({ping: 1});
+        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    }
+    finally{
+
+    }
+}
+run().catch(console.dir)
+
+
+
+
+app.listen(port, ()=> {
+    console.log(`Simple CRUD server is Running on Port: ${port}`);
+
+})
+
+
