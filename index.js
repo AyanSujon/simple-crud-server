@@ -36,10 +36,25 @@ async function run() {
     try{
         await client.connect();
         // add database related apis here
-        app.post('/users', (req, res)=>{
+        const usersDB = client.db('usersDB');
+        const usersCollection = usersDB.collection('users');
+
+        app.get('/users', async (req, res)=> {
+          const cursor = usersCollection.find();
+          const result = await cursor.toArray();
+          res.send(result);
+        })
+
+
+
+
+        app.post('/users', async (req, res)=>{
           // console.log('hitting the users post api');
           const newUser = req.body;
           console.log('user info: ', newUser);
+          const result = await usersCollection.insertOne(newUser);
+          res.send(result);
+
 
         })
 
