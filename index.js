@@ -38,13 +38,20 @@ async function run() {
         // add database related apis here
         const usersDB = client.db('usersDB');
         const usersCollection = usersDB.collection('users');
-
+        // find a collection for all data
         app.get('/users', async (req, res)=> {
           const cursor = usersCollection.find();
           const result = await cursor.toArray();
           res.send(result);
         })
-
+        // find specific data by id
+        app.get('/users/:id', async(req, res)=> {
+          const id = req.params.id;
+          console.log("Need user with id ", id);
+          const query = {_id: new ObjectId(id)};
+          const result = await usersCollection.findOne(query);
+          res.send(result);
+        })
 
 
 
